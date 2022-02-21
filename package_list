@@ -1,0 +1,30 @@
+sudo apt-get install python3-pygame python3-serial
+sudo chmod +x /home/pi/software/thermostat/get_data.py
+sudo chmod +x /home/pi/software/thermostat/gui.py
+sudo chmod +x /home/pi/software/thermostat/gui_start
+sudo chmod +x /home/pi/software/thermostat/thermostat_snmp.py
+sudo ln -s /home/pi/software/thermostat/thermostat_get_data.service /etc/systemd/system/thermostat_get_data.service
+sudo ln -s /home/pi/software/thermostat/thermostat_gui.service /etc/systemd/system/thermostat_gui.service
+sudo systemctl enable thermostat_get_data.service
+sudo systemctl enable thermostat_gui.service
+
+xserver-xorg
+xserver-xorg-fbturbo
+xinit
+
+cp /boot/config.txt /boot/config.txt.old
+cp /boot/cmdline.txt /boot/cmdline.txt.old
+git clone https://github.com/waveshare/LCD-show.git
+# nano LCD35-show -> zakomentovat reboot
+nano -w /boot/cmdline.txt -> zmenit root na sda2
+
+(fbcp?)
+
+sudo apt-get install openvpn
+sudo systemctl enable openvpn@client.service
+
+sudo apt-get install snmpd
+ln -s /home/pi/software/thermostat/thermostat_snmp.py /etc/snmp/thermostat.py
+
+sudo apt-get install xserver-xorg-input-evdev
+sudo mv /usr/share/X11/xorg.conf.d/10-evdev.conf /usr/share/X11/xorg.conf.d/45-evdev.conf

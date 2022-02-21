@@ -1,0 +1,13 @@
+[Unit]
+Description=Thermostat GUI script
+Requires=thermostat_get_data.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/software/thermostat
+ExecStart=/home/pi/software/thermostat/gui_start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
