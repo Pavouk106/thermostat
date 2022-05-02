@@ -115,15 +115,20 @@ while 1:
 		# Rychlost vetru
 		wind_file = open(path_to_files + 'wind', 'w')
 		try:
+			debug_print("Wind start")
 			data = urllib.urlopen("http://wind.pavoukovo.cz/wind").read().decode() # Otevrit soubor
+			debug_print("Wind opened")
 			if data.find("html") == -1:
+				debug_print("Wind HTML found")
 				wind_file.write(data)
 				debug_print("DEBUG: HTTP wind read ok")
 			else:
+				debug_print("Wind bad reply")
 				for i in range(0, 5):
 					wind_file.write("%s\n" % u"---") # Kdyz se nepodari otevrit soubor, zapsat ---
 				debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP wind read failed, remote file not found")
 		except:
+			debug_print("Wind open failed")
 			for i in range(0, 5):
 				wind_file.write("%s\n" % u"---") # Kdyz se nepodari otevrit soubor, zapsat ---
 			debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP wind read failed")

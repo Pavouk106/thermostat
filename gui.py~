@@ -301,7 +301,7 @@ def window_main(window_type, mouse_click):
 		button_on_off(1, u"Ruční topení", heating_time_show, white, main_temp_vertical_divider + border, 0 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
 		
 		# Button for pool
-		button_on_off(2, u"Bazén", u"(" + str(pool_temp_values[0]) + "/" + str(pool_temp_values[1]) + " " + u"\u00b0" + "C)", white, main_temp_vertical_divider + border, 0 + border + 35 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
+		button_on_off(1, u"Bazén", u"(" + str(pool_temp_values[0]) + "/" + str(pool_temp_values[1]) + " " + u"\u00b0" + "C)", white, main_temp_vertical_divider + border, 0 + border + 35 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
 
 		# Compass for wind direction and speed
 		pygame.draw.circle(display, white, (main_temp_vertical_divider + border + 65, 0 + border + 70 + border + 70 + border + 45), 45 , 2)
