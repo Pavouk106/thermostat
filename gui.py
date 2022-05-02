@@ -5,7 +5,7 @@ import pygame, sys, datetime, time, serial, os.path, codecs, math
 from pygame.locals import *
 from time import strftime
 
-wind_angle = 15
+wind_angle = 15 # Angle of rotation of wind display
 
 debug = 0
 path_to_files = '/tmp/'

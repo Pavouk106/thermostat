@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo xinit /home/pi/.xinitrc > /tmp/xinit.log 2>&1
+sudo xinit /home/pi/.xinitrc -- -nocursor > /tmp/xinit.log 2>&1
