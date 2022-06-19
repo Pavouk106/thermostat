@@ -279,7 +279,7 @@ def window_main(window_type, mouse_click):
 		display.blit(TextSurf, TextRect)
 
 		# Button for water heating + text on it
-		button_on_off(0, u"Ohřev vody", u"(" + str(temp_values[4]) + "/" + str(temp_values[5]) + " " + u"\u00b0" + "C)", white, main_temp_vertical_divider + border, 0 + border, 130, 45, red_dark, red, green_dark, green)
+		button_on_off(0, u"Ohřev vody", str(temp_values[4]) + "/" + str(temp_values[5]) + " " + u"\u00b0" + "C", white, main_temp_vertical_divider + border, 0 + border, 130, 45, red_dark, red, green_dark, green)
 
 		# Button for heating
 		if heating_time_end != heating_time:
@@ -289,7 +289,7 @@ def window_main(window_type, mouse_click):
 				seconds = "0" + str(seconds)
 			else:
 				seconds = str(seconds)
-			heating_time_show = "(" + minutes + ":" + seconds + ")"
+			heating_time_show = minutes + ":" + seconds
 		else:
 			minutes = str(int(heating_time / 60))
 			seconds = heating_time % 60
@@ -297,11 +297,16 @@ def window_main(window_type, mouse_click):
 				seconds = "0" + str(seconds)
 			else:
 				seconds = str(seconds)
-			heating_time_show = "(" + minutes + ":" + seconds + ")"
+			heating_time_show = minutes + ":" + seconds
 		button_on_off(1, u"Ruční topení", heating_time_show, white, main_temp_vertical_divider + border, 0 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
-		
+
 		# Button for pool
-		button_on_off(2, u"Bazén", u"(" + str(pool_temp_values[0]) + "/" + str(pool_temp_values[1]) + " " + u"\u00b0" + "C)", white, main_temp_vertical_divider + border, 0 + border + 35 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
+		if float(pool_temp_values[1]) - float(pool_temp_values[0]) >= 0:
+			temp_string = str(pool_temp_values[0]) + u"\u00b0" + "C (+" + str(float(pool_temp_values[1]) - float( pool_temp_values[0])) + ")"
+		else:
+			temp_string = str(pool_temp_values[0]) + u"\u00b0" + "C (-" + str(abs(float(pool_temp_values[1]) - float( pool_temp_values[0]))) + ")"
+#			temp_string = str(pool_temp_values[0]) + u"(" + "-" + str(abs(float(pool_temp_values[1]) - float( pool_temp_values[0]))) + " " + u"\u00b0" + "C)"
+		button_on_off(2, u"Bazén", temp_string, white, main_temp_vertical_divider + border, 0 + border + 35 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
 
 		# Compass for wind direction and speed
 		pygame.draw.circle(display, white, (main_temp_vertical_divider + border + 65, 0 + border + 70 + border + 70 + border + 45), 45 , 2)
@@ -340,6 +345,7 @@ def window_main(window_type, mouse_click):
 
 		pygame.display.update();
 
+time.sleep(10)
 
 while True:
 #	global x, y, heating_time, heating_time_end
