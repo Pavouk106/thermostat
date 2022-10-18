@@ -152,28 +152,33 @@ def compass_line(color, angle, length, width):
 # Rework needed - add repeated reads if one fails; rework may not be needed if FPS is 5
 # 2022 - rework probably not needed, backend reworked instead
 def read_data():
-	global main_temp_values, humidity_values, temp_values, temp_names, wind_values
+	global local_temp_values, humidity_values, temp_values, temp_names, wind_values
 
 	try:
-		with open(path_to_files + 'local_temps', 'r') as main_temp_file:
+		with open(path_to_files + 'main_temps', 'r') as main_temp_file:
 			main_temp_lines = main_temp_file.read().splitlines()
 			main_temp_values[0] = main_temp_lines[0]
+			main_temp_values[1] = main_temp_lines[1]
 			main_temp_file.close()
 			#if (len(main_temp_values) == 0):
 			#	main_temp_values[0] = u"---"
 	except:
 		main_temp_values[0] = u"---"
-		debug_print("DEBUG: " + strftime("%H:%M:%S") + " " + path_to_files + "local_temps read failed")
+		debug_print("DEBUG: " + strftime("%H:%M:%S") + " " + path_to_files + "dallas read failed or reading sensors failed")
 		pass
+
 	try:
 		with open(path_to_files + 'meteo', 'r') as meteo_file:
 			meteo_lines = meteo_file.read().splitlines()
 			meteo_file.close()
-			main_temp_values[1] = str(round(float(meteo_lines[2]), 1))
+			# Tenhle radek netreba
+			# main_temp_values[1] = str(round(float(meteo_lines[2]), 1))
 			pool_temp_values[0] = str(round(float(meteo_lines[0]), 1))
 			pool_temp_values[1] = str(round(float(meteo_lines[1]), 1))
 	except:
 		main_temp_values[1] = u"---"
+		pool_temp_values[0] = u"---"
+		pool_temp_values[1] = u"---"
 		debug_print("DEBUG: " + strftime("%H:%M:%S") + " " + path_to_files + "meteo temp read failed")
 		pass
 
@@ -301,11 +306,14 @@ def window_main(window_type, mouse_click):
 		button_on_off(1, u"Ruční topení", heating_time_show, white, main_temp_vertical_divider + border, 0 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
 
 		# Button for pool
-		if float(pool_temp_values[1]) - float(pool_temp_values[0]) >= 0:
-			temp_string = str(pool_temp_values[0]) + u"\u00b0" + "C (+" + str(float(pool_temp_values[1]) - float( pool_temp_values[0])) + ")"
+		if pool_temp_values[0] == u"---" and pool_temp_values[1] == u"---":
+			temp_string = "---"
 		else:
-			temp_string = str(pool_temp_values[0]) + u"\u00b0" + "C (-" + str(abs(float(pool_temp_values[1]) - float( pool_temp_values[0]))) + ")"
-#			temp_string = str(pool_temp_values[0]) + u"(" + "-" + str(abs(float(pool_temp_values[1]) - float( pool_temp_values[0]))) + " " + u"\u00b0" + "C)"
+			if float(pool_temp_values[1]) - float(pool_temp_values[0]) >= 0:
+				temp_string = str(pool_temp_values[0]) + u"\u00b0" + "C (+" + str(float(pool_temp_values[1]) - float( pool_temp_values[0])) + ")"
+			else:
+				temp_string = str(pool_temp_values[0]) + u"\u00b0" + "C (-" + str(abs(float(pool_temp_values[1]) - float( pool_temp_values[0]))) + ")"
+#				temp_string = str(pool_temp_values[0]) + u"(" + "-" + str(abs(float(pool_temp_values[1]) - float( pool_temp_values[0]))) + " " + u"\u00b0" + "C)"
 		button_on_off(2, u"Bazén", temp_string, white, main_temp_vertical_divider + border, 0 + border + 35 + border + 35 + border, 130, 45, red_dark, red, green_dark, green)
 
 		# Compass for wind direction and speed
@@ -344,8 +352,6 @@ def window_main(window_type, mouse_click):
 				compass_line(red, int(wind_values[4]), "long", 5)
 
 		pygame.display.update();
-
-time.sleep(10)
 
 while True:
 #	global x, y, heating_time, heating_time_end

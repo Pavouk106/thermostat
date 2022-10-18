@@ -4,7 +4,7 @@
 import time, os.path
 from datetime import datetime
 
-debug = True
+debug = False
 
 path_to_files = '/tmp/'
 
