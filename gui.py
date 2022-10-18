@@ -63,13 +63,9 @@ temp_names = [None] * 8 # Will get filled from reading a file
 
 # Values arrays/lists
 main_temp_values = [None] * 2
-current_main_temp_values = [None] * 2
 humidity_values = [None] * 2
-current_humidity_values = [None] * 2
 temp_values = [None] * 8
-current_temp_values = [None] * 8
 wind_values = [None] * 5
-current_wind_values = [None] * 5
 pool_temp_values = [None] * 2
 
 heating_time = 1800 # How long to run heating, in seconds
@@ -152,7 +148,7 @@ def compass_line(color, angle, length, width):
 # Rework needed - add repeated reads if one fails; rework may not be needed if FPS is 5
 # 2022 - rework probably not needed, backend reworked instead
 def read_data():
-	global local_temp_values, humidity_values, temp_values, temp_names, wind_values
+	global main_temp_values, humidity_values, temp_values, temp_names, wind_values
 
 	try:
 		with open(path_to_files + 'main_temps', 'r') as main_temp_file:
