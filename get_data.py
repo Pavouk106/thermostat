@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import serial, time, os.path, urllib, re
-#from urllib import urlopen
+from urllib.request import urlopen
 
-debug = False
+debug = True
 
 path_to_files = '/tmp/'
 
@@ -114,7 +114,7 @@ while 1:
 		# Udaje z bazenu/meteobudky
 		meteo_file = open(path_to_files + 'meteo', 'w')
 		try:
-			data = urllib.urlopen("http://meteo.pavoukovo.cz/meteo").read().decode() # Otevrit soubor
+			data = urlopen("http://meteo.pavoukovo.cz/meteo", data=None, timeout=3).read().decode() # Otevrit soubor
 			if data.find("html") == -1:
 				meteo_file.write(data)
 				lines = data.splitlines()
@@ -126,7 +126,7 @@ while 1:
 			else:
 				for i in range(0, 7):
 	                                meteo_file.write("%s\n" % u"---") # Kdyz se nepodari otevrit soubor, zapsat ---
-	                        debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP meteo read failed, remote file not found")
+				debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP meteo read failed, remote file not found")
 		except:
 			for i in range(0, 7):
 				meteo_file.write("%s\n" % u"---") # Kdyz se nepodari otevrit soubor, zapsat ---
@@ -141,7 +141,7 @@ while 1:
 		# Teploty z kotelny
 		temps_file = open(path_to_files + 'temps', 'w')
 		try:
-			data = urllib.urlopen("http://control.pavoukovo.cz/temps").read().decode() # Otevrit soubor
+			data = urlopen("http://control.pavoukovo.cz/temps", data=None, timeout=3).read().decode() # Otevrit soubor
 			if data.find("html") == -1:
 				temps_file.write(data)
 				debug_print("DEBUG: HTTP temps read ok")
@@ -158,20 +158,20 @@ while 1:
 		# Rychlost vetru
 		wind_file = open(path_to_files + 'wind', 'w')
 		try:
-			debug_print("Wind start")
-			data = urllib.urlopen("http://wind.pavoukovo.cz/wind").read().decode() # Otevrit soubor
-			debug_print("Wind opened")
+			debug_print("DEBUG: Wind start")
+			data = urlopen("http://wind.pavoukovo.cz/wind", data=None, timeout=3).read().decode() # Otevrit soubor
+			debug_print("DEBUG: Wind opened")
 			if data.find("html") == -1:
-				debug_print("Wind HTML found")
+				debug_print("DEBUG: Wind HTML found")
 				wind_file.write(data)
 				debug_print("DEBUG: HTTP wind read ok")
 			else:
-				debug_print("Wind bad reply")
+				debug_print("DEBUG: Wind bad reply")
 				for i in range(0, 5):
 					wind_file.write("%s\n" % u"---") # Kdyz se nepodari otevrit soubor, zapsat ---
 				debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP wind read failed, remote file not found")
 		except:
-			debug_print("Wind open failed")
+			debug_print("DEBUG: Wind open failed")
 			for i in range(0, 5):
 				wind_file.write("%s\n" % u"---") # Kdyz se nepodari otevrit soubor, zapsat ---
 			debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP wind read failed")
